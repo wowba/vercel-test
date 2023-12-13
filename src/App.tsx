@@ -1,10 +1,17 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
+import reactLogo from './assets/react.svg';
+import viteLogo from '/vite.svg';
+import axios from 'axios';
+import './App.css';
+import { useState } from 'react';
 
 function App() {
-  const [count, setCount] = useState(0)
+  const [quotes, setQuotes] = useState([]);
+
+  const fetchQuote = async () => {
+    const data = await axios('/api/quotes');
+    console.log(data);
+    setQuotes(data.data);
+  };
 
   return (
     <>
@@ -17,19 +24,14 @@ function App() {
         </a>
       </div>
       <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.tsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
+      <button onClick={fetchQuote}>fetch data</button>
+      <ul>
+        {quotes.map((item: { text: string; author: string }) => {
+          return <li key={item.text}>{item.text}</li>;
+        })}
+      </ul>
     </>
-  )
+  );
 }
 
-export default App
+export default App;
