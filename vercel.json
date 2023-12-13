@@ -1,8 +1,8 @@
 {
   "rewrites": [
     {
-      "source": "/api/quotes",
-      "destination": "https://type.fit/api/quotes"
+      "source": "/api/:path*",
+      "destination": "https://type.fit/api/:path*"
     }
   ]
 }
