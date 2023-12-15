@@ -8,7 +8,7 @@ export default defineConfig({
   server: {
     proxy: {
       '/api': {
-        target: 'https://type.fit/api',
+        target: process.env.BACKEND_ENDPOINT,
         changeOrigin: true,
         rewrite: (path) => path.replace(/^\/api/, ''),
       },
