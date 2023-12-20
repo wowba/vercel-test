@@ -1,25 +1,48 @@
 import axios from 'axios';
 import './App.css';
-import { useState } from 'react';
+import { useQuery } from '@tanstack/react-query';
+import { Suspense } from 'react';
+import SuccessQuoteList from './SuccessQuoteList';
+import FailQuoteList from './FailQuoteList';
+import QueryErrorBoundary from './QueryErrorBoundary';
 
 function App() {
-  const [quotes, setQuotes] = useState([]);
-
-  const fetchQuote = async () => {
+  const getQuotes = async () => {
     const data = await axios('/api/quotes');
-    console.log(data);
-    setQuotes(data.data);
+    return data.data;
   };
+
+  const { data, refetch: refetch2 } = useQuery({
+    queryKey: ['afterClick'],
+    queryFn: getQuotes,
+    enabled: false,
+  });
 
   return (
     <>
-      <h1>Vite + React</h1>
-      <button onClick={fetchQuote}>fetch data</button>
-      <ul>
-        {quotes.map((item: { text: string; author: string }) => {
-          return <li key={item.text}>{item.text}</li>;
-        })}
-      </ul>
+      <h1>Study!</h1>
+      <div style={{ display: 'flex', flexDirection: 'column', gap: '2rem' }}>
+        {/* success suspense */}
+        <Suspense fallback={<div>Loading...</div>}>
+          <SuccessQuoteList />
+        </Suspense>
+        {/* fail suspense */}
+        <QueryErrorBoundary>
+          <Suspense fallback={<div>Loading...</div>}>
+            <FailQuoteList />
+          </Suspense>
+        </QueryErrorBoundary>
+
+        {/* manual refetch */}
+        <div>
+          <button type="button" onClick={() => refetch2()}>
+            refetch2
+          </button>
+          {data?.map((item: { text: string; author: string }) => {
+            return <li key={item.text}>{item.text}</li>;
+          })}
+        </div>
+      </div>
     </>
   );
 }
