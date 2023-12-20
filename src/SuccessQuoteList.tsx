@@ -1,4 +1,3 @@
-import React from 'react';
 import { useSuspenseQuery } from '@tanstack/react-query';
 import axios from 'axios';
 
