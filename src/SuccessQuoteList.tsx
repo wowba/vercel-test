@@ -3,7 +3,7 @@ import axios from 'axios';
 
 const SuccessQuoteList = () => {
   const getQuotes = async () => {
-    const data = await axios('/api/quotes');
+    const data = await axios('https://type.fit/api/quotes');
     return data.data;
   };
 
